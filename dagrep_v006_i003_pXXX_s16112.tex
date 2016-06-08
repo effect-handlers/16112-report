@@ -67,7 +67,7 @@ At a seminar about handlers for algebraic effects -- often presented as an opera
 \abstractauthor[Philipp G. Haselwarter]{Philipp G. Haselwarter (University of Ljubljana, SI)}
 \license
 \jointwork{Andrej Bauer, Gaëtan Gilbert, Matija Pretnar, Christopher A. Stone}
-\abstractref[https://github.com/Andromedans/andromeda/releases/tag/dagstuhl-2016]{http://andromedans.github.io/andromeda/}
+\abstractref[http://andromedans.github.io/andromeda/]{http://andromedans.github.io/andromeda/}
 \abstractrefurl{https://github.com/Andromedans/andromeda/releases/tag/dagstuhl-2016}
 
 We present Andromeda, a proof assistant for dependent type theory with
@@ -263,8 +263,10 @@ There are a number of properties that a feasible effect system should satisfy:
 \end{description}
 %
 To see what the above properties imply, take a program
-\verb|if X then perform E1 else perform E2|.
-The effect information of \verb|perform E1|
+
+\verb|if X then perform E1 else perform E2|
+
+\noindent The effect information of \verb|perform E1|
 must mention \verb|E1| for the sake of soundness, but omit \verb|E2| for the sake of usefulness. Conversely, the effect information of \verb|perform E2|
 should mention \verb|E2| but not \verb|E1|. But the whole program must remain typable due to backwards compatibility, and its type should mention both \verb|E1| and \verb|E2| due to soundness.
 From this, it follows that the effect system needs to provide a way of enlarging effect information.
@@ -387,8 +389,9 @@ let choose_opposite = handler
   | choose () k -> if choose () then (k false) else (k true)
 \end{verbatim}
 %
-to have the type $A ! \{ \chooseop \} \& \eqs \hto A ! \{ \chooseop \} \& \eqs$
-for any set of equations ${\eqs \subseteq \{ \assoc, \comm, \idem \}}$.
+to have the type \quad $A ! \{ \chooseop \} \& \eqs \hto A ! \{ \chooseop \} \& \eqs$
+
+\noindent for any set of equations ${\eqs \subseteq \{ \assoc, \comm, \idem \}}$.
 
 \section{Open questions}
 
