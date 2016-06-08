@@ -64,7 +64,7 @@ This report documents the program and the outcomes of Dagstuhl Seminar 16112 "Fr
 At a seminar about handlers for algebraic effects -- often presented as an operationally oriented alternative to more explicitly monad-based approaches for specifying and implementing computational effects -- it is important not to forget about some of the considerable theoretical and practical strengths of monads.  This talk outlines some areas in which effect handlers -- as currently conceived in languages like Eff -- may show comparative weaknesses, and is meant to inspire reflection and discussion on how those can best be addressed.
 
 \abstracttitle{Andromeda: Type theory with Equality Reflection}
-\abstractauthor[Philipp Haselwarter]{Philipp Haselwarter (University of Ljubljana, SI)}
+\abstractauthor[Philipp G. Haselwarter]{Philipp G. Haselwarter (University of Ljubljana, SI)}
 \license
 \jointwork{Andrej Bauer, Gaëtan Gilbert, Matija Pretnar, Christopher A. Stone}
 \abstractref[https://github.com/Andromedans/andromeda/releases/tag/dagstuhl-2016]{http://andromedans.github.io/andromeda/}
@@ -140,9 +140,9 @@ The seminar started with a tutorial, which had a two-fold purpose of establishin
 
 In the tutorial, we first looked at the basic idea of algebraic effects: every computation returns a value or performs an effect by calling an operation. Therefore, the effectful behaviour can be captured in an algebraic theory comprising a set of basic operations and equations between them. We have shown how this leads to an interpretation of computations with trees that have called operations as branching points and returned values as leaves. This furthermore results in an algebraic denotational semantics, where computations are interpreted with free models of the aforementioned algebraic theory.
 
-Next, we have looked at how one may generalize exception handlers to handlers of other algebraic effects, and the subtleties involved in the generalisation. Using many simple examples of input & output handlers, we explored the flexibility that handlers offer in managing the control flow of programs. As a more involved example, we took a look at how one may implement many variants of backtracking with a handler for the non-deterministic choice operation. We have also revisited the algebraic semantics and seen how handlers correspond exactly to the homomorphisms, induced by the universal property of the free model.
+Next, we have looked at how one may generalize exception handlers to handlers of other algebraic effects, and the subtleties involved in the generalisation. Using many simple examples of input \& output handlers, we explored the flexibility that handlers offer in managing the control flow of programs. As a more involved example, we took a look at how one may implement many variants of backtracking with a handler for the non-deterministic choice operation. We have also revisited the algebraic semantics and seen how handlers correspond exactly to the homomorphisms, induced by the universal property of the free model.
 
-Finally, we sketched how one may adapt a standard type system for a call-by-value language into a type & effect system, which captures the set of potentially called operations in addition to the type of returned values.
+Finally, we sketched how one may adapt a standard type system for a call-by-value language into a type \& effect system, which captures the set of potentially called operations in addition to the type of returned values.
 
 \abstracttitle{Compiling Eff to OCaml}
 \abstractauthor[Matija Pretnar, Amr Hany Shehata Saleh, and Tom Schrijvers]{Matija Pretnar (University of Ljubljana, SI), Amr Hany Shehata Saleh (KU Leuven, BE), and Tom Schrijvers (KU Leuven, BE)}
