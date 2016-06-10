@@ -101,7 +101,7 @@ to communicate with the user-code by asking questions about equalities. We then
 showcase how equality reflection can be used to introduce inductive types with
 their judgemental computation rules and to control opaqueness of definitions.
 Finally, we present how a meta-language with effects can be used to implement a
-memoization tactic.
+memorization tactic.
 
 \begin{thebibliography}{0}
 \bibitem{ML84} Per Martin-Löf. \emph{Intuitionistic Type Theory}. Bibliopolis, 1984.
@@ -350,7 +350,7 @@ The main premise of algebraic effects is that effects can be described with an e
 
 \subsubsection*{Issues with interpreting handlers}
 
-Handlers of algebraic effects, which assign a handling term for each operation, can be interpreted as homomorphisms from the free model to some other (not neccessary free) model of the same theory~\cite{DBLP:journals/corr/PlotkinP13}. However, there are computationally interesting handlers that do not respect all of the expected equations. One is a handler that collects all possible results of a non-deterministic computation in a list. This respects the associativity, but not the idempotency or commutativity of $\chooseop$. Similarly, a state handler that logs all memory updates handles a computation that sequentially writes two values differently than one that writes only the second one, even though these two computations are often considered equivalent~\cite{DBLP:conf/fossacs/PlotkinP02}.
+Handlers of algebraic effects, which assign a handling term for each operation, can be interpreted as homomorphisms from the free model to some other (not necessary free) model of the same theory~\cite{DBLP:journals/corr/PlotkinP13}. However, there are computationally interesting handlers that do not respect all of the expected equations. One is a handler that collects all possible results of a non-deterministic computation in a list. This respects the associativity, but not the idempotency or commutativity of $\chooseop$. Similarly, a state handler that logs all memory updates handles a computation that sequentially writes two values differently than one that writes only the second one, even though these two computations are often considered equivalent~\cite{DBLP:conf/fossacs/PlotkinP02}.
 
 Since handlers that do not respect the equations cannot receive an algebraic interpretation~\cite{DBLP:journals/corr/PlotkinP13}, some recent work~\cite{DBLP:journals/corr/BauerP13,DBLP:conf/icfp/KammarLO13} assumes no non-trivial equations to hold, giving up most of the existing results on combining algebraic theories~\cite{DBLP:journals/tcs/HylandPP06} and optimizations~\cite{DBLP:conf/popl/KammarP12}.
 
