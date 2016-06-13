@@ -378,6 +378,148 @@ Keith Wansbrough and Simon L.~Peyton Jones.
 
 \section{Open problems}
 
+\abstracttitle{Are all functions continuous and how to prove it?}
+\abstractauthor[Andrej Bauer]{Andrej Bauer (University of Ljubljana, SI)}
+\license
+
+\newcommand{\NN}{\mathbb{N}}
+
+\subsubsection{Mathematical background}
+
+Brouwer's statement \emph{``all functions are continuous''} can be formulated without
+reference to topology as follows. A functional $f : (\NN \to \NN) \to \NN$ is
+\emph{continuous} at $a : \NN \to \NN$ when there exists $m : \NN$ such that, for all
+$b : \NN \to \NN$, if $\forall k < m, a k = b k$ then $f a = f b$. This says that the
+value of $f a$ depends only on the initial segment $a\,0$, $a\,1$, ..., $a\,(m-1)$.
+
+The statement \emph{``all functionals are continuous everywhere''} is valid in various
+models of intuitionistic mathematics, such as Kleene's number realizability and Kleene's
+function realizability. We can ask whether the statement is realized in any given
+functional programming language. Such a realizer is called a \emph{modulus of continuity}
+and is a functional $\mu : ((\NN \to \NN) \to \NN) \to (\NN \to \NN) \to \NN$ such that,
+for all $f : (\NN \to \NN) \to \NN$ and $a, b : \NN \to \NN$, if
+$\forall k < \mu f a \,.\, a\,k = b\,k$ then $f a = f b$. Essentially, $\mu f a$ computes
+how much of $a$ is needed to compute $f a$.
+
+\subsubsection{Implementing the modulus of continuity}
+
+It is impossible to implement $\mu$ in PCF and Haskell. Briefly, every hereditarily total
+functional definable in PCF is extensional (one can use Ulrich Berger's theory of
+totality~\cite{BergerTotality} to establish this), while a result by
+Troelstra~\cite[\S 9.6.10--9.6.11]{TroelstraModulus} shows that an extensional modulus of
+continuity violates choice principles that are realized by PCF.
+
+Therefore, we necessarily need additional computational features that let $\mu$ inspect
+the workings of~$f$. Here are a few attempts, where we pretend that the type of integers
+is the type of natural numbers (we ignore nagative values).
+
+\paragraph*{ML with references}
+
+Consider ML with references (and no other features). Then a possible $\mu$ is
+%
+\begin{verbatim}
+   let mu_ref f a =
+     let k = ref 0 in
+     let a' n = (k := max !k n; a n) in
+       f a' ; !k
+\end{verbatim}
+%
+However:
+%
+\begin{enumerate}
+\item Can $f$ use its own local references? If it can use them in an unrestricted way then
+  it can break \verb|mu_ref|. How do we reasonably restrict the use of local references by~$f$?
+\item More generally, how do we formulate the exact preconditions on $f$ and $a$?
+\item What is the theorem that needs to be proved, and how is it proved?
+\end{enumerate}
+
+\paragraph*{ML with exceptions}
+
+With exceptions (and no other features) we can do it as follows:
+%
+\begin{verbatim}
+   exception Abort
+   
+   let mu_exc f a =
+     let rec search k =
+       try
+         let a' n = (if n < k then a n else raise Abort) in
+           f a' ; k
+       with Abort -> search (k+1)
+     in
+       search 0
+\end{verbatim}
+%
+However:
+%
+\begin{enumerate}
+\item What if $f$ catches \verb|Abort|? May it do so? What is the exact precondition on~$f$?
+\item Would local exceptions help? If so, can $f$ use its own local exceptions?
+\end{enumerate}
+
+\paragraph*{Other setups}
+
+\begin{enumerate}
+\item 
+   In Haskell we could do everything inside a fixed monad. This is still not entirely
+   easy, even if we figure out what it means for $f$ to be ``pure''.
+\item
+   Moving to a total language is probably helpful. However, keep in mind that~$\mu$ does
+   not exist in pure $\lambda$-calculus, so straight Agda or some such system is out of the 
+   question.
+\item
+   Other effects can be used to implement a candidate~$\mu$, but it seems like they should
+   be \emph{local} (local references, local exceptions, delimited control) or else $f$ has access
+   to them.
+\end{enumerate}
+
+\subsubsection{Open problem}
+\label{sec:open-problem}
+
+At first sight it seems that the above implementations of~$\mu$ work, but as soon as we
+try to formulate exactly what it is that we want to prove, it becomes clear that not
+everything is clear, so the first problem is:
+%
+\begin{quote}
+  \emph{Explain what it means to realize ``all functions are continuous'' in a
+    realizability model based on a programming language with computational effects.}
+\end{quote}
+%
+One has to find a good notion of a realizer that uses effects in a ``benign way''. For
+instance, asking for purity in the sense of~\cite{HoffmanPure} seems too restrictive. Once it is
+clear what problem we are trying to solve, we may attempt to prove that the modulus is
+really there:
+%
+\begin{quote}
+  \emph{Identify comptuational effects which allow realization of the modulus of
+    continuity, and prove \emph{rigorously} prove that it works.}
+\end{quote}
+%
+Attacking the problem ought to improve our ability to argue about higher-type computation
+in the presenence of computational effects.
+
+\begin{thebibliography}{1}
+
+\bibitem{HoffmanPure}
+Andrej Bauer, Martin Hofmann and Aleksandr Karbyshev.
+\newblock On Monadic Parametricity of Second-Order Functionals.
+\newblock {\em Foundations of Software Science and Computation Structures -- 16th
+               International Conference, {FOSSACS} 2013}, 225--240, 2013.
+
+\bibitem{BergerTotality}
+Ulrich Berger.
+\newblock Computability and Totality in Domains.
+\newblock {\em Mathematical Structures in Computer Science} 12(3), 281--294, 2002.
+
+\bibitem{TroelstraModulus}
+Anne Troelstra and Dirk van Dalen.
+\newblock Constructivism in mathematics, volume 2.
+\newblock Elsevier, 1988.
+
+\end{thebibliography}
+
+
+
 \abstracttitle{Capturing algebraic equations in an effect system}
 \abstractauthor[Matija Pretnar]{Matija Pretnar (University of Ljubljana, SI)}
 \license
@@ -399,9 +541,12 @@ The main premise of algebraic effects is that effects can be described with an e
 
 Handlers of algebraic effects, which assign a handling term for each operation, can be interpreted as homomorphisms from the free model to some other (not necessary free) model of the same theory~\cite{DBLP:journals/corr/PlotkinP13}. However, there are computationally interesting handlers that do not respect all of the expected equations. One is a handler that collects all possible results of a non-deterministic computation in a list. This respects the associativity, but not the idempotency or commutativity of $\chooseop$. Similarly, a state handler that logs all memory updates handles a computation that sequentially writes two values differently than one that writes only the second one, even though these two computations are often considered equivalent~\cite{DBLP:conf/fossacs/PlotkinP02}.
 
-Since handlers that do not respect the equations cannot receive an algebraic interpretation~\cite{DBLP:journals/corr/PlotkinP13}, some recent work~\cite{DBLP:journals/corr/BauerP13,DBLP:conf/icfp/KammarLO13} assumes no non-trivial equations to hold, giving up most of the existing results on combining algebraic theories~\cite{DBLP:journals/tcs/HylandPP06} and optimizations~\cite{DBLP:conf/popl/KammarP12}.
+Since handlers that do not respect the equations cannot receive an algebraic interpretation~\cite{DBLP:journals/corr/PlotkinP13}, some recent work~\cite{HoffmanPure,DBLP:conf/icfp/KammarLO13} assumes no non-trivial equations to hold, giving Andrej Bauer, Martin Hofmann and Aleksandr Karbyshev.theories~\cite{DBLP:journals/tcs/HylandPP06} and On Monadic Parametricity of Second-Order Functionals.
 
-\subsubsection*{Extending types with equations}
+\subsubsection*{Extending Foundations of Software Science and Computation Strucures - 16th
+               International Conference, {FOSSACS} 2013, Held as Part of the European
+               Joint Conferences on Theory and Practice of Software, {ETAPS} 2013,
+               Rome, Italy, March 16-24, 2013. Proceedingswith equations}
 
 A possible way of resolving this issue is to capture the subset of valid equations in types. An algebraic approach already has a natural effect system, in which computations receive a type $A ! \ops$, where $A$ is the type of returned values, and $\ops$ is the set of operations that may get called~\cite{DBLP:journals/corr/BauerP13,DBLP:conf/icfp/KammarLO13}. For example, a non-deterministic computation returning integers would be given the type $\intty ! \{ \chooseop \}$, while a pure computation would have the type $\intty ! \emptyset$.
 
