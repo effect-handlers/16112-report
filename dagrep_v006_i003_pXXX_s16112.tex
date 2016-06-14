@@ -541,12 +541,9 @@ The main premise of algebraic effects is that effects can be described with an e
 
 Handlers of algebraic effects, which assign a handling term for each operation, can be interpreted as homomorphisms from the free model to some other (not necessary free) model of the same theory~\cite{DBLP:journals/corr/PlotkinP13}. However, there are computationally interesting handlers that do not respect all of the expected equations. One is a handler that collects all possible results of a non-deterministic computation in a list. This respects the associativity, but not the idempotency or commutativity of $\chooseop$. Similarly, a state handler that logs all memory updates handles a computation that sequentially writes two values differently than one that writes only the second one, even though these two computations are often considered equivalent~\cite{DBLP:conf/fossacs/PlotkinP02}.
 
-Since handlers that do not respect the equations cannot receive an algebraic interpretation~\cite{DBLP:journals/corr/PlotkinP13}, some recent work~\cite{HoffmanPure,DBLP:conf/icfp/KammarLO13} assumes no non-trivial equations to hold, giving Andrej Bauer, Martin Hofmann and Aleksandr Karbyshev.theories~\cite{DBLP:journals/tcs/HylandPP06} and On Monadic Parametricity of Second-Order Functionals.
+Since handlers that do not respect the equations cannot receive an algebraic interpretation~\cite{DBLP:journals/corr/PlotkinP13}, some recent work~\cite{DBLP:journals/corr/BauerP13,DBLP:conf/icfp/KammarLO13} assumes no non-trivial equations to hold, giving up most of the existing results on combining algebraic theories~\cite{DBLP:journals/tcs/HylandPP06} and optimizations~\cite{DBLP:conf/popl/KammarP12}.
 
-\subsubsection*{Extending Foundations of Software Science and Computation Strucures - 16th
-               International Conference, {FOSSACS} 2013, Held as Part of the European
-               Joint Conferences on Theory and Practice of Software, {ETAPS} 2013,
-               Rome, Italy, March 16-24, 2013. Proceedingswith equations}
+\subsubsection*{Extending types with equations}
 
 A possible way of resolving this issue is to capture the subset of valid equations in types. An algebraic approach already has a natural effect system, in which computations receive a type $A ! \ops$, where $A$ is the type of returned values, and $\ops$ is the set of operations that may get called~\cite{DBLP:journals/corr/BauerP13,DBLP:conf/icfp/KammarLO13}. For example, a non-deterministic computation returning integers would be given the type $\intty ! \{ \chooseop \}$, while a pure computation would have the type $\intty ! \emptyset$.
 
